@@ -2,8 +2,7 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
-def get_character_movies_from_api(character_name)
-  character_name = "han solo"
+def get_all_characters
   url = 'http://www.swapi.co/api/people/'
   all_characters = []
   begin
@@ -12,13 +11,31 @@ def get_character_movies_from_api(character_name)
     all_characters += result["results"]
     url = result["next"]
   end while url
-  # look up the character and stop when you find it
-  found_character = all_characters.find do |character|
-    name = character["name"]
-    name.downcase == character_name
-  end
-  binding.pry
+  all_characters
+end
 
+def find_character(characters, character_name)
+  characters.find do |character|
+    name = character["name"]
+    name.downcase == character_name.downcase
+  end
+end
+
+def find_films_for(character)
+  film_urls = character["films"]
+  film_urls.map do |film_url|
+    result = RestClient.get(film_url).body
+    JSON.parse(result)
+  end
+end
+def get_character_movies_from_api(character_name)
+  all_characters = get_all_characters
+  found_character = find_character(all_characters, character_name)
+  films = find_films_for(found_character)
+  puts "#{found_character["name"]} has starred in the following movies:"
+  films.each.with_index(1) do |film, index|
+    puts "#{index}. #{film["title"]}"
+  end
 end
 
 def parse_character_movies(films_hash)
