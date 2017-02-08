@@ -1,0 +1,18 @@
+x1. Run bin/run.rb
+x2. Collect name from user
+x  a. take name -> downcase
+x3. Make request to the api and get all characters
+4. Look up our character in the list
+5. Find their movies.
+6. Make requests to get movie info
+7. Print out the films
+  
+  # characters_raw = RestClient.get(url).body
+  # result = JSON.parse(characters_raw)
+  # all_characters += result["results"]
+  # while result["next"]
+  #   url = result["next"]
+  #   characters_raw = RestClient.get(url).body
+  #   result = JSON.parse(characters_raw)
+  #   all_characters += result["results"]
+  # end
